@@ -1,12 +1,12 @@
 # projects section data
 # If you don't have language feature(language.yml is empty), ignore "i18n" items
 # Suggest projects' img be located at '/static/assets/img/landing', and edit following img items.
-- name: PHP class
-  i18n: helpers
+- name: RBAC with Yii 2
+  i18n: yii2-rbac
   gh_user: hiscaler
   repo: helpers
   img: /static/assets/img/github.png
-  desc: PHP helper class file.
+  desc: RBAC GUI for Yii 2.
 
 - name: Mai3
   i18n: mai3

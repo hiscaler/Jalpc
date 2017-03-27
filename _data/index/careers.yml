@@ -10,7 +10,7 @@
     detail: Now
     i18n: company_a_date
   job:
-    detail: PHP, wechat
+    detail: PHP, Wechat, MySQL, Javascript
     i18n: company_a_job
   icon: fa-plus-square
 
@@ -24,6 +24,6 @@
     detail: Jun. 2015
     i18n: company_b_date
   job:
-    detail: Java, JBoss, Activiti workflow
+    detail: Java, JBoss, Activiti workflow, MySQL, Oracle, SQLServer
     i18n: company_b_job
   icon: fa-plus-square
