@@ -17,6 +17,7 @@ icon: icon-java
 
 
 ##配置 Maven 环境
+
 将下载的 ActiveMQ 安装包解压到您要安装的目录，比如“C:\java\activeMQ”，打开命令行，并进入安装目录下的 bin 目录，发现有 win32和 win64 两个文件夹，这2个文件夹分别对应 windows 32 位和 windows 64 位操作系统的启动脚本，根据自己实际情况进入相应的目录，双击 activemq.bat 脚本文件，启动 ActiveMQ。完毕后，我们可以看到如下的界面，表示 ActiveMQ 已经启动完毕。
 
 ![ActiveMQ start]({{ site.img_path }}/install-activemq/activemq.start.png)
