@@ -6,7 +6,7 @@ desc: "Windows 10 中安装配置 Maven"
 keywords: "Java Maven"
 categories: [Java]
 tags: [Java,Maven]
-icon: icon-html
+icon: icon-java
 ---
 
 准备工作
@@ -32,6 +32,7 @@ icon: icon-html
 验证
 ===
 上述操作完毕后，我们进入命令行，输入 mvn -v 命令，查看是否有如下输出，如有，则安装正常。
+
 ![Java version check]({{ site.img_path }}/install-maven-in-windows10/mvn-v.command.png)
 
 > 在 Windows 其他系列版本中安装步骤一样，只是设置环境变量的方式稍有区别而已。
