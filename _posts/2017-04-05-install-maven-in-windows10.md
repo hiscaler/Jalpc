@@ -20,6 +20,7 @@ icon: icon-java
 配置 Maven 环境
 ==============
 将下载的 Maven 安装包解压到您要安装的目录，比如“C:\java”，接着设置环境变量。依次操作：
+
 我的电脑“右键”　=> 属性 => 高级 => 环境变量
 找到系统变量设置处，点击“新建”
 ![Java version check]({{ site.img_path }}/install-maven-in-windows10/m2_home.setting.png)
