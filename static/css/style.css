@@ -5874,6 +5874,10 @@ dd.project-people {
     line-height: 26px
 }
 
+.article img {
+    max-width: 100%;
+}
+
 .article-title {
     text-align: center;
     margin: 40px 0 100px
