@@ -10,6 +10,7 @@ icon: icon-db
 ---
 
 ## 添加文档
+
 - 使用自己的 ID
 
 ```json
@@ -473,3 +474,46 @@ bool 查询与 bool 过滤相似，用于合并多个查询子句。不同的是
 复合查询语句可以加入其他查询子句，复合过滤语句也可以加入其他过滤子句。通常情况下，一条查询语句需要过滤语句的辅助，全文本搜索除外。
 
 所以说，查询语句可以包含过滤子句，反之亦然。以便于我们切换 query 或 filter 的上下文。这就要求我们在读懂需求的同时构造正确有效的语句。
+
+##### 带过滤的查询语句
+
+在收件箱中查询 email 内容包括“business opportunity” 的邮件
+
+```json
+GET /_search
+{
+    "query": {
+        "filtered": {
+            "query": {
+                "match": {
+                    "email": "business opportunity"
+                }
+            }, 
+            "filter": {
+                "term": {
+                    "folder": "inbox"
+                }
+            }
+        }
+    }
+}
+```
+
+##### 单条过滤语句
+
+过滤出收件箱总的所有记录
+
+```json
+GET /_search
+{
+    "query": {
+        "filtered": {
+            "filter": {
+                "term": {
+                    "folder": "inbox"
+                }
+            }
+        }
+    }
+}
+```
