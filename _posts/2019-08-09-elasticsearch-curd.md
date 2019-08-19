@@ -191,16 +191,17 @@ DELETE {index}/_doc/{id}
 - 示例
 
   ```json
+   // 不同的 index
   POST /_bulk
-  {
-    "create": {
-      "_index": "{index}",
-      "_id": "{id}"
-    }
-  }
-  {
-    "title": "My first blog post"
-  }
+  {"create":{"_index":"{index}","_id":"123"}}
+  {"title":"My first blog post"}
+  
+  // 相同的 index（你依旧可以覆盖元数据行的 _index ， 在没有覆盖时它会使用URL中的值作为默认值。）
+  POST /{index}/_bulk
+  {"create":{"_id":"123"}}
+  {"title":"My first blog post 1"}
+  {"create":{"_id":"1234"}}
+  {"title":"My first blog post 2"}
   ```
 
   - 注意
