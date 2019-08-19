@@ -135,6 +135,13 @@ POST {index}/_update/{id}
   "script": "ctx._source.times+=1"
 }
 
+{
+  "script": "ctx._source.keyA+='newValue'"
+}
+// Delete
+{
+  "script": "ctx.op = ctx._source.times == 3 ? 'delete' : 'none'"
+}
 ```
 
 失效的参数：
@@ -144,3 +151,29 @@ POST {index}/_update/{id}
 }
 ```
 
+## 更新可能不存在的文档 
+
+```json
+POST /{index}/_update/{id}
+{
+  "script": "ctx._source.views+=1",
+  "upsert": {
+    "views": 1
+  }
+}
+```
+
+## 更新和冲突 
+
+通过 retry_on_conflict 参数设置重试次数来自动完成， 这样 update 操作将会在发生错误前重试——这个值默认为
+0。
+
+```json
+POST /{index}/_update/{id}?retry_on_conflict=5
+{
+  "script": "ctx._source.views+=1",
+  "upsert": {
+    "views": 0
+  }
+}
+```
