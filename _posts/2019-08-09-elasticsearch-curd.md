@@ -41,6 +41,8 @@ PUT {index}/_doc/{id}/_create
 
 ## 检索文档
 
+### 检索单个文档
+
 ```json
 GET {index}/_search
 {
@@ -59,12 +61,28 @@ GET {index}/_search
 
 _source: 需要返回的元数据
 
-## 检索文档是否存在
+### 检索文档是否存在
+
 ```json
 HEAD {index}/_doc/123456789
 ```
 
-## 更新整个文档
+### 检索多个文档
+
+```json
+GET /tj_www_webchat_copy/_mget
+{
+  "ids": [
+    "98175",
+    "98170"
+  ]
+}
+````
+
+## 更新文档
+
+### 更新整个文档
+
 ```json
 PUT tj_www_webchat_copy/_doc/{id}
 {
@@ -74,6 +92,70 @@ PUT tj_www_webchat_copy/_doc/{id}
 ```
 
 **文档不能被更改， 只能被替换 。**
+
+### 文档局部更新
+
+#### 基于请求
+
+```json
+POST {index}/_update/{id}
+{
+  "doc": {
+    "keyA": "value AA"
+  }
+}
+```
+
+#### 基于脚本
+
+```json
+POST {index}/_update/{id}
+{
+  "script": "ctx._source.times+=1"
+}
+
+{
+  "script": "ctx._source.keyA+='newValue'"
+}
+// Delete
+{
+  "script": "ctx.op = ctx._source.times == 3 ? 'delete' : 'none'"
+}
+```
+
+失效的参数：
+```json
+"params" : {
+    "new_tag" : "search"
+}
+```
+
+### 更新可能不存在的文档
+
+```json
+POST /{index}/_update/{id}
+{
+  "script": "ctx._source.views+=1",
+  "upsert": {
+    "views": 1
+  }
+}
+```
+
+### 更新和冲突
+
+通过 retry_on_conflict 参数设置重试次数来自动完成， 这样 update 操作将会在发生错误前重试——这个值默认为
+0。
+
+```json
+POST /{index}/_update/{id}?retry_on_conflict=5
+{
+  "script": "ctx._source.views+=1",
+  "upsert": {
+    "views": 0
+  }
+}
+```
 
 ## 删除文档
 
@@ -113,67 +195,3 @@ PUT tj_www_webchat_copy/_doc/{id}?version=1
 
 外部版本号与之前说的内部版本号在处理的时候有些不同。 它不再检查 _version 是否与请求中指定的一致， 而是检查是否小于指定的版本。 如果请求成功， 外部版本号就会被存储到 _version 中。
 外部版本号不仅在索引和删除请求中指定， 也可以在创建(create)新文档中指定。 
-
-## 文档局部更新
-
-### 基于请求
-
-```json
-POST {index}/_update/{id}
-{
-  "doc": {
-    "keyA": "value AA"
-  }
-}
-```
-
-### 基于脚本
-
-```json
-POST {index}/_update/{id}
-{
-  "script": "ctx._source.times+=1"
-}
-
-{
-  "script": "ctx._source.keyA+='newValue'"
-}
-// Delete
-{
-  "script": "ctx.op = ctx._source.times == 3 ? 'delete' : 'none'"
-}
-```
-
-失效的参数：
-```json
-"params" : {
-    "new_tag" : "search"
-}
-```
-
-## 更新可能不存在的文档 
-
-```json
-POST /{index}/_update/{id}
-{
-  "script": "ctx._source.views+=1",
-  "upsert": {
-    "views": 1
-  }
-}
-```
-
-## 更新和冲突 
-
-通过 retry_on_conflict 参数设置重试次数来自动完成， 这样 update 操作将会在发生错误前重试——这个值默认为
-0。
-
-```json
-POST /{index}/_update/{id}?retry_on_conflict=5
-{
-  "script": "ctx._source.views+=1",
-  "upsert": {
-    "views": 0
-  }
-}
-```
