@@ -70,7 +70,7 @@ HEAD {index}/_doc/123456789
 ### 检索多个文档
 
 ```json
-GET /tj_www_webchat_copy/_mget
+GET /{index}/_mget
 {
   "ids": [
     "98175",
@@ -84,7 +84,7 @@ GET /tj_www_webchat_copy/_mget
 ### 更新整个文档
 
 ```json
-PUT tj_www_webchat_copy/_doc/{id}
+PUT {index}/_doc/{id}
 {
   "keyA": "value A",
   "keyB": "value B"
@@ -165,6 +165,48 @@ DELETE {index}/_doc/{id}
 
 **删除一个文档也不会立即从磁盘上移除， 它只是被标记成已删除。 Elasticsearch 将会在你之后添加更多索引的时候才会在后台进行删除内容的清理。**
 
+## 批量操作
+
+- 格式
+
+  ```json
+  {
+      "action": {metadata}\n
+      {request body}\n
+      "action": {metadata}\n
+      {request body}\n
+  }
+  ```
+
+  `action/metadata` 这一行定义了文档行为(what action)发生在哪个文档(which document)之上。action 必须是以下几种：
+
+  create: 当文档不存在时创建之。
+
+  index: 创建新文档或替换已有文档。 
+
+  update: 局部更新文档。
+
+  delete: 删除一个文档。
+
+- 示例
+
+  ```json
+  POST /_bulk
+  {
+    "create": {
+      "_index": "{index}",
+      "_id": "{id}"
+    }
+  }
+  {
+    "title": "My first blog post"
+  }
+  ```
+
+  - 注意
+
+    bulk 请求不是原子操作——它们不能实现事务。 每个请求操作时分开的， 所以每个请求的成功与否不干扰其它操作。 
+
 ## 处理冲突
 
 在数据库中， 有两种通用的方法确保在并发更新时修改不丢失： 
@@ -178,7 +220,7 @@ DELETE {index}/_doc/{id}
 被 Elasticsearch 使用， 假设冲突不经常发生， 也不区块化访问， 然而， 如果在读写过程中数据发生了变化， 更新操作将失败。 这时候又程序决定在失败后如何解决冲突。 实际情况中， 可以重新尝试更新， 刷新数据（重新读取） 或者直接反馈给用户 。
 
 ```json
-PUT tj_www_webchat_copy/_doc/{id}?version=1
+PUT {index}/_doc/{id}?version=1
 {
   "keyA": "value A",
   "keyB": "value B"
