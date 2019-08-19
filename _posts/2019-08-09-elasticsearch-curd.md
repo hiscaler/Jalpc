@@ -31,7 +31,7 @@ POST /{index}
 ```
 ### 创建一个新文档
 ```json
-PUT {index}/_doc/123456789/_create
+PUT {index}/_doc/{id}/_create
 {
   "keyA": "value A",
   "keyB": "value B"
@@ -66,17 +66,19 @@ HEAD {index}/_doc/123456789
 
 ## 更新整个文档
 ```json
-PUT tj_www_webchat_copy/_doc/123456789
+PUT tj_www_webchat_copy/_doc/{id}
 {
   "keyA": "value A",
   "keyB": "value B"
 } 
 ```
 
+**文档不能被更改， 只能被替换 。**
+
 ## 删除文档
 
 ```json
-DELETE {index}/_doc/123456789
+DELETE {index}/_doc/{id}
 ```
 
 **删除一个文档也不会立即从磁盘上移除， 它只是被标记成已删除。 Elasticsearch 将会在你之后添加更多索引的时候才会在后台进行删除内容的清理。**
@@ -94,7 +96,7 @@ DELETE {index}/_doc/123456789
 被 Elasticsearch 使用， 假设冲突不经常发生， 也不区块化访问， 然而， 如果在读写过程中数据发生了变化， 更新操作将失败。 这时候又程序决定在失败后如何解决冲突。 实际情况中， 可以重新尝试更新， 刷新数据（重新读取） 或者直接反馈给用户 。
 
 ```json
-PUT tj_www_webchat_copy/_doc/123456789?version=1
+PUT tj_www_webchat_copy/_doc/{id}?version=1
 {
   "keyA": "value A",
   "keyB": "value B"
@@ -106,7 +108,39 @@ PUT tj_www_webchat_copy/_doc/123456789?version=1
 ### 使用外部版本控制系统
 
 一种常见的结构是使用一些其他的数据库做为主数据库， 然后使用 Elasticsearch 搜索数据， 这意味着所有主数据库发生变化， 就要将其拷贝到 Elasticsearch 中。 如果有多个进程负责这些数据的同步， 就会遇到上面提到的并发问题。
-如果主数据库有版本字段——或一些类似于 timestamp 等可以用于版本控制的字段——是你就可以在 Elasticsearch 的查询字符串后面添加 version_type=external 来使用这些版本号。 版本号必须是整数， 大于零小于 9.2e+18 ——Java中的正
-的 long 。
+
+如果主数据库有版本字段——或一些类似于 timestamp 等可以用于版本控制的字段——是你就可以在 Elasticsearch 的查询字符串后面添加 version_type=external 来使用这些版本号。 版本号必须是整数， 大于零小于 9.2e+18 ——Java中的正的 long 。
+
 外部版本号与之前说的内部版本号在处理的时候有些不同。 它不再检查 _version 是否与请求中指定的一致， 而是检查是否小于指定的版本。 如果请求成功， 外部版本号就会被存储到 _version 中。
 外部版本号不仅在索引和删除请求中指定， 也可以在创建(create)新文档中指定。 
+
+## 文档局部更新
+
+### 基于请求
+
+```json
+POST {index}/_update/{id}
+{
+  "doc": {
+    "keyA": "value AA"
+  }
+}
+```
+
+### 基于脚本
+
+```json
+POST {index}/_update/{id}
+{
+  "script": "ctx._source.times+=1"
+}
+
+```
+
+失效的参数：
+```json
+"params" : {
+    "new_tag" : "search"
+}
+```
+
