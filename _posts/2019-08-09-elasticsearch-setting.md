@@ -4,9 +4,9 @@ title:  "ElasticSearch 设置"
 date:   2019-08-19
 desc: "ElasticSearch 设置"
 keywords: "es,elasticsearch"
-categories: [es]
+categories: [Database]
 tags: [es,elasticsearch]
-icon: icon-database
+icon: icon-db
 ---
 
 ## 增加复制分片数量

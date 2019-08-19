@@ -4,7 +4,7 @@ title:  "ElasticSearch 知识点"
 date:   2019-08-19
 desc: "ElasticSearch 知识点"
 keywords: "es,elasticsearch"
-categories: [es]
+categories: [Database]
 tags: [es,elasticsearch]
 icon: icon-db
 ---
