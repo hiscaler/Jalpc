@@ -35,3 +35,15 @@ icon: icon-db
 - green: 所有主要和复制的分片都可用
 - yellow: 所有主分片可用，但不是所有复制分片都可用
 - red: 不是所有的主分片都可用
+
+## 确切值 VS 全文文本
+
+确切值（Exact values）：是确定的， 正如它的名字一样。 比如一个date或用户ID， 也可以包含更多的字符串比如 username 或 email 地址。
+
+全文文本（Full text）： 从另一个角度来说是文本化的数据(常常以人类的语言书写)， 比如一片推文（Twitter  的文章）或邮件正文。 
+
+## 复合核心字段类型
+
+- 多值字段: ["a", "b", "c"]
+- 空字段: “”， null, [], [null]
+- 多层对象: {"name": {"first_name": "John", "last_name": "Smith"}}
